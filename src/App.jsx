@@ -11,7 +11,7 @@ function App() {
     {/* add toasts container */}
     <div className="toastsContainer">
       <Toaster
-        position="top-right"
+        position="top-center"
         reverseOrder={false}
       />
     </div>
