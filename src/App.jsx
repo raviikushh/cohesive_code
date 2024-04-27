@@ -7,7 +7,7 @@ function App() {
 
   return (
     //add the BrowserRouter and Routes components
-    <>
+    <> 
     {/* add toasts container */}
     <div className="toastsContainer">
       <Toaster
