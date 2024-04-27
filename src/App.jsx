@@ -1,9 +1,18 @@
-
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Home from "./pages/home"
+import EditorPage from "./pages/EditorPage"
 
 function App() {
 
   return (
-<h1>Hello</h1>
+    <>
+      <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/editor/:roomId" element={<EditorPage />} />
+          </Routes>
+      </BrowserRouter>
+    </>
   )
 }
 
