@@ -1,11 +1,17 @@
-import { Editor } from "@monaco-editor/react";
+import { Editor,loader } from "@monaco-editor/react";
 import { useRef, useState } from "react";
 import Output from "./Output";
+
+
+
+  // Define the list of languages you want to support
 const supportedLanguages = [
   { label: 'JavaScript', value: 'nodejs', version: '17.1.0'},
-  { label: 'Typescript', value: 'typescript' , version: '4.4.4'},
+  { label: 'Java', value: 'java' , version: 'JDK 17.0.1.4'},
   { label: 'HTML', value: 'html', version: '5'},
-  { label: 'CSS', value: 'css', version: '3'},
+  { label: 'python', value: 'python3', version: '3.9.9'},
+  { label: 'C++', value: 'cpp17', version: 'g++ 17 GCC 11.1.0'},
+  { label: 'C', value: 'c', version: 'GCC 11.1.0'},
   // Add more languages as needed
 ];
 
@@ -19,7 +25,6 @@ const CustomEditor = () => {
     editor.focus();
   };
 
-  // Define the list of languages you want to support
 
   // Function to handle language change
   const handleLanguageChange = (e) => {
@@ -46,10 +51,10 @@ const CustomEditor = () => {
           defaultValue="// Write code here"
           onMount={onMount}
           value={value}
-          editorRef={editorRef}
           onChange={(value) => setValue(value)}
+          loader={loader}
         />
-      <Output language={language.value} editorRef={editorRef} version={language.version}/>
+      <Output  editorRef={editorRef} language={language.value} version={language.version}/>
     </div>
   );
 };

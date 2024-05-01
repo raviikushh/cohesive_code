@@ -1,10 +1,10 @@
-
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import  { useState } from 'react';
 
 
 const Output = ({ editorRef, language, version }) => {
+    const[loading,setLoading] = useState(false);
     const [output,setOutput] = useState('');
     console.log({version})
     const runCode = async() => {
@@ -28,9 +28,12 @@ const options = {
   };
   
   try {
+        setLoading(true);
       const response = await axios.request(options);
       setOutput(response.data.output);
+      setLoading(false);
   } catch (error) {
+    setLoading(false);
       console.error(error);
   }
 }
@@ -40,9 +43,9 @@ const options = {
             <button className="btn border-2 rounded-md border-slate-300 cursor-pointer p-1 flex w-28 mb-2 justify-around mt-2 hover:bg-green-700 bg-green-500" 
             onClick={runCode}
                 >
-                Run Code</button>
-            <div className="output h-32 w-[75vw] border-2 rounded-md border-slate-500 text-slate-300">
-                       <p className='text-slate-400'>Output :</p>  {output}
+            {loading ? <>Running...</> : <>Run Code</>}    </button>
+            <div className="output h-32 w-[75vw] border-2 rounded-md border-slate-500 text-slate-300 cursor-text">
+                       <p className='text-slate-400'>Output :</p> {output}
             </div>
         </div>
     );
