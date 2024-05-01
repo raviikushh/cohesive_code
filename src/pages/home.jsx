@@ -43,7 +43,7 @@ const Home = () => {
     return (
         //room id and user name input fields
         <div className="homePageWrapper flex justify-center min-h-screen bg-gray-800">
-            <div className="formWrapper flex flex-col gap-8 items-center justify-center border-2 p-8 mt-20 rounded-lg bg-gray-700     shadow-lg">
+            <div className="formWrapper flex flex-col gap-8 items-center justify-center border-2 p-8 mt-10 rounded-lg bg-gray-700     shadow-lg">
                 <h4 className="text-2xl font-semibold text-white">Paste invitation ROOM ID</h4>
                 <div className="inputGroup flex flex-col gap-4 items-center">
                     <input
