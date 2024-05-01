@@ -11,3 +11,9 @@ body{
     font-family: 'Poppins', sans-serif;
     /* background-color: rgb(28, 65, 102); */
 }
+
+@layer base{
+  input{
+    @apply border border-gray-500 p-3;
+  }
+}
