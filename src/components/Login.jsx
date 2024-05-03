@@ -17,7 +17,6 @@ function Login() {
       toast.success("Logged in successfully");
     } catch (err) {
       console.error(err);
-
       toast.error("Invalid credentials");
     }
   };
@@ -26,7 +25,7 @@ function Login() {
     <div className="flex items-center justify-center ">
       <form
         onSubmit={handleLogin}
-        className="max-w-md w-full flex flex-col gap-4 mt-60 "
+        className="max-w-md w-full flex flex-col gap-4 mt-48"
       >
         <h1 className="text-4xl font-semibold">Login</h1>
         <div className="text-gray-300 ">

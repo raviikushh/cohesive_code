@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@nextui-org/react';
+import { setDocument } from '../hooks/database';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -8,7 +10,10 @@ const Dashboard = () => {
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectLanguage, setNewProjectLanguage] = useState('');
 
-  const handleCreateProject = () => {
+  // Adding data in database
+
+
+  const handleCreateProject = async (e) => {
     if (newProjectName && newProjectLanguage) {
       const newProject = {
         id: projects.length + 1,
@@ -23,44 +28,56 @@ const Dashboard = () => {
       setNewProjectLanguage('');
       //   navigate(`/editor/${newProject.id}`);
     }
+    e.prevenetDefault()
+    const data ={
+      name: newProjectName,
+      language: newProjectLanguage
+    };
+    try{
+      await setDocument('users', data)
+    }
+    catch(error){
+      console.log(error)
+    }
   };
 
   return (
       <div className="container mx-auto py-8"> 
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
       <div className="flex justify-end mb-4">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        <Button
+        size="lg"
+          color="secondary"
           onClick={() => setShowModal(true)}
         >
           Add Project
-        </button>
+        </Button>
       </div>
 
       <h2 className="text-2xl font-bold mb-4">Created By You</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 ">
         {projects.map((project) => (
           <div
             key={project.id}
-            className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+            className="bg-slate-500 shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             onClick={() => navigate(`/editor/${project.id}`)}
           >
-            <h2 className="text-xl font-bold mb-2">{project.name}</h2>
-            <p>Language: {project.language}</p>
+            <h2 className="text-xl text-black font-bold mb-2">{project.name}</h2>
+            <p className="text-black">Language: {project.language}</p>
           </div>
         ))}
       </div>
       <h2 className="text-2xl font-bold mb-4">Shared Projects</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                    <h2 className="text-xl font-bold mb-2">Project Name</h2>
-                    <p>Language</p>
+                <div className="bg-slate-500 shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                    <h2 className="text-xl text-black font-bold mb-2">Project Name</h2>
+                    <p className="text-black">Language</p>
                 </div>
         </div>        
 
       {showModal ? (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg">
+          <div className="bg-slate-700 p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-4">Create New Project</h2>
             <div className="mb-4">
               <label htmlFor="projectName" className="block font-bold mb-2">
@@ -90,19 +107,21 @@ const Dashboard = () => {
                 <option value="java">Java</option>
               </select>
             </div>
-            <div className="flex justify-end">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+            <div className="flex justify-end gap-4">
+              <Button
+                color="secondary"
+                type="submit"
+                size="lg "
                 onClick={handleCreateProject}
               >
                 Create Project
-              </button>
-              <button
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+              </Button>
+              <Button
+                color="primary"
                 onClick={() => setShowModal(false)}
               >
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>
