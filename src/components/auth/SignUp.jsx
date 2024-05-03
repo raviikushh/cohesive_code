@@ -4,6 +4,7 @@ import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Button, Input, Link } from "@nextui-org/react";
 
 function SignUp() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -23,45 +24,32 @@ function SignUp() {
   };
 
   return (
-<>
-  <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-    <div className="mb-4">
-      <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
-        Email
-      </label>
-      <input
-        type="email"
-        name="email"
-        id="email"
-        required
-        placeholder="Enter your email"
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+<div className="flex items-center justify-center ">
+  <form onSubmit={handleSubmit} 
+  className="max-w-md w-full flex flex-col gap-4 mt-48">
+    <h1 className="text-4xl font-semibold">Sign Up</h1>
+    <div className="text-gray-300 ">
+          Already have an account ? <Link href="/login">Login here</Link>
+        </div>
+      <Input
+        isClearable name="email" type="email" label="Email" 
       />
-    </div>
-    <div className="mb-6">
-      <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
-        Password
-      </label>
-      <input
+      <Input
         type="password"
         name="password"
         id="password"
+        label="Password"
         required
-        placeholder="Enter your password"
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className=""
       />
-    </div>
-    <button
-      type="submit"
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-    >
-      Sign up
-    </button>
+        <Button size="lg" color="primary" type="submit">
+          Sign Up
+        </Button>
     {errorMessage && (
       <span className="text-red-500 mt-4 text-sm">{errorMessage}</span>
     )}
   </form>
-</>
+</div>
   );
 }
 

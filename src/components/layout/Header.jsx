@@ -1,15 +1,15 @@
 import useAuthState from "../../hooks/useAuthState";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@nextui-org/react";
+import { Button , Link} from "@nextui-org/react";
 
 function Header() {
   const navigate = useNavigate();
   const { user, logout } = useAuthState();
 
   return (
-    <header className="h-12 ">
+    <header className="h-16 ">
       <nav className="flex items-center justify-between py-4 px-6">
-        <div className="font-medium uppercase ">Cohesive Code</div>
+      <Link href="/"><div className="font-medium uppercase cursor-pointer" >Cohesive Code</div></Link>  
 
         <div className="flex gap-4">
           {user === null ? (
@@ -22,7 +22,7 @@ function Header() {
           ) : (
             <>
               <Button onClick={() => navigate("/dashboard")}>Dashboard</Button>
-              <Button onClick={logout}>Logout</Button>
+              <Button color="primary" onClick={logout}>Logout</Button>
             </>
           )}
         </div>
