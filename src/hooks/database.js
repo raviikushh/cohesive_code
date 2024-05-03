@@ -33,7 +33,7 @@ export const addDocument = (collection,data) =>{
   const ref = doc(db,collection);
   return addDoc(ref,{...data,created_at:serverTimestamp(),updated_at:serverTimestamp()});
 }
-
+  
 // update a document in a collection
 export const updateDocument = (collection, docId, data) => {
   const ref = doc(db, collection, docId);

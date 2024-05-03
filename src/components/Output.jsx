@@ -39,7 +39,6 @@ const options = {
   }
 }
 
-
 document.addEventListener('keypress', function (e) {
   if(e.key ==='Enter' && e.shiftKey){
       console.log('Enter key pressed');
