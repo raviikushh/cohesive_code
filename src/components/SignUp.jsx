@@ -3,6 +3,7 @@
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 function SignUp() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -11,11 +12,13 @@ function SignUp() {
       e.preventDefault();
       const email = e.target.email.value;
       const password = e.target.password.value;
-
       await createUserWithEmailAndPassword(auth, email, password);
+      
+      toast.success("Account created successfully");
     } catch (err) {
       console.error(err);
       setErrorMessage(err.message);
+      toast.error(errorMessage);
     }
   };
 

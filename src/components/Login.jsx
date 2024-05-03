@@ -1,18 +1,25 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useState } from "react";
+import {useNavigate} from 'react-router-dom';
+import toast from "react-hot-toast";
 
 function Login() {
+  const navigate = useNavigate();
   const[error, setError] = useState(null);
   const handleLogin = async (e) => {
+    
     try {
       e.preventDefault();
       const email = e.target.email.value;
       const password = e.target.password.value;
       await signInWithEmailAndPassword(auth, email, password);
+      navigate('/dashboard');
+      toast.success('Logged in successfully');
     } catch (err) {
       console.error(err);
       setError(err.message);
+      toast.error("Invalid credentials");
     }
   };
   return (
@@ -50,7 +57,7 @@ function Login() {
     >
       Login
     </button>
-    {error && <div className="text-red-500 ml-4">{error}</div>}
+    {<div className="text-red-500 ml-4">{error}</div>}
   </div>
 </form>
   );

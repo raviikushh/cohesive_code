@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import  { useState } from 'react';
 
 
+
 const Output = ({ editorRef, language, version }) => {
     const[loading,setLoading] = useState(false);
     const [output,setOutput] = useState('');
@@ -38,6 +39,13 @@ const options = {
   }
 }
 
+
+document.addEventListener('keypress', function (e) {
+  if(e.key ==='Enter' && e.shiftKey){
+      console.log('Enter key pressed');
+      runCode();
+  }
+})
     return (
         <div className="flex flex-col flex-wrap items-center">
             <button className="btn border-2 rounded-md border-slate-300 cursor-pointer p-1 flex w-28 mb-2 justify-around mt-2 hover:bg-green-700 bg-green-500" 

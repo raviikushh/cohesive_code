@@ -15,6 +15,10 @@ const EditorPage = () => {
     <div className="mainwrapper flex h-screen bg-gray-900">
         {/* leftbar */}
         <div className="leftBar w-64 flex flex-col justify-between bg-gray-800 text-white p-4">
+            <div className="name_lang">
+                <h2>Project Name </h2>
+                <h3>Language</h3>
+            </div>
             <div className="leftInner">
                 <h3 className="text-lg font-semibold mb-4">Connected</h3>
                 <div className="clientsList flex flex-col gap-2">
