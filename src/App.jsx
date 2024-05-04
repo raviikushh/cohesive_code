@@ -1,13 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import Home from "./pages/home";
-import EditorPage from "./pages/EditorPage";
-import { Toaster } from "react-hot-toast";
-import SignUp from "./components/SignUp";
-import Header from "./components/Header";
-import Login from "./components/Login";
-import Dashboard from "./pages/Dashboard";
-import Home from "./components/Home";
 import { NextUIProvider } from "@nextui-org/react";
+import { Toaster } from "react-hot-toast";
+import SignUp from "./components/auth/SignUp";
+import Header from "./components/layout/Header";
+import Login from "./components/auth/Login";
+import Dashboard from "./pages/Dashboard";
+import EditorPage from "./pages/EditorPage";
+import Home from "./pages/Home";
 
 function App() {
   return (

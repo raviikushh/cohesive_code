@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import Client from '../components/Client';
-import Editor from '../components/Editor';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import Client from "../components/shared/Client";
+import Editor from "../components/editor/Editor";
+import toast from "react-hot-toast";
 
 const EditorPage = () => {
   const [clients] = useState([
-    { socketId: 1, username: 'Ravi', email: 'ravi@example.com' },
-    { socketId: 2, username: 'Adarsh', email: 'adarsh@example.com' },
-    { socketId: 3, username: 'Nayak', email: 'nayak@example.com' },
+    { socketId: 1, username: "Ravi", email: "ravi@example.com" },
+    { socketId: 2, username: "Adarsh", email: "adarsh@example.com" },
+    { socketId: 3, username: "Nayak", email: "nayak@example.com" },
   ]);
-  const [newCollaborator, setNewCollaborator] = useState('');
+  const [newCollaborator, setNewCollaborator] = useState("");
   const [collaborators, setCollaborators] = useState(clients);
 
   const handleAddCollaborator = () => {
@@ -18,11 +18,10 @@ const EditorPage = () => {
       const newCollaboratorObj = { socketId: newId, email: newCollaborator };
       setCollaborators([...collaborators, newCollaboratorObj]);
       console.log(collaborators);
-      setNewCollaborator('');
-      toast.success('Collaborator added successfully');
-    }
-    else{
-        toast.error('Please enter a collaboartor email');
+      setNewCollaborator("");
+      toast.success("Collaborator added successfully");
+    } else {
+      toast.error("Please enter a collaboartor email");
     }
   };
 
@@ -31,7 +30,9 @@ const EditorPage = () => {
       {/* leftbar */}
       <div className="w-64 flex flex-col justify-between bg-gray-800 text-white p-4">
         <div>
-          <h2 className="text-2xl font-semibold mb-2 text-blue-400">Project Name</h2>
+          <h2 className="text-2xl font-semibold mb-2 text-blue-400">
+            Project Name
+          </h2>
           <h3 className="text-lg mb-6 text-green-400">Language</h3>
           <div className="mb-6">
             <div className="flex justify-between items-center mb-4">
@@ -45,7 +46,10 @@ const EditorPage = () => {
             </div>
             <div className="collaboratorsList flex flex-col gap-2">
               {collaborators.map((collaborator) => (
-                <div key={collaborator.socketId} className="bg-gray-700 rounded-md p-2 text-sm shadow-md">
+                <div
+                  key={collaborator.socketId}
+                  className="bg-gray-700 rounded-md p-2 text-sm shadow-md"
+                >
                   {collaborator.email}
                 </div>
               ))}
@@ -64,7 +68,11 @@ const EditorPage = () => {
             <h3 className="text-lg font-semibold mb-4">Online</h3>
             <div className="clientsList flex flex-col gap-2">
               {clients.map((client) => (
-                <Client key={client.socketId} username={client.username} className="bg-gray-700 rounded-md p-2 text-sm shadow-md" />
+                <Client
+                  key={client.socketId}
+                  username={client.username}
+                  className="bg-gray-700 rounded-md p-2 text-sm shadow-md"
+                />
               ))}
             </div>
           </div>

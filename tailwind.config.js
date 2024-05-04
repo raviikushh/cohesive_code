@@ -1,4 +1,5 @@
 import {nextui} from '@nextui-org/react'
+import { orange,emerald } from 'tailwindcss/colors'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -11,6 +12,19 @@ export default {
     extend: {},
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [nextui({defaultTheme:'dark',themes:{
+    dark:{
+      colors:{
+        primary:{
+          ...orange,
+          DEFAULT:orange["600"],
+        },
+        secondary:{
+          ...emerald,
+          DEFAULT:emerald["600"],
+        }
+      }
+    }
+  }},)],
 }
 
