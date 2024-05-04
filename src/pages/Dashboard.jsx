@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@nextui-org/react';
-import { setDocument } from '../hooks/database';
+import { addDocument } from '../hooks/database';
+import useAuthState from '../hooks/useAuthState';
 
 const Dashboard = () => {
+  const { user } = useAuthState();
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectLanguage, setNewProjectLanguage] = useState('');
 
-  // Adding data in database
 
-
-  const handleCreateProject = async (e) => {
+  const handleCreateProject = async () => {
     if (newProjectName && newProjectLanguage) {
       const newProject = {
         id: projects.length + 1,
@@ -25,22 +25,22 @@ const Dashboard = () => {
 
       setShowModal(false);
       setNewProjectName('');
-      setNewProjectLanguage('');
+      setNewProjectLanguage('');  
       //   navigate(`/editor/${newProject.id}`);
     }
-    e.prevenetDefault()
     const data ={
       name: newProjectName,
       language: newProjectLanguage
     };
+    console.log(data)
+      // Adding data in database
     try{
-      await setDocument('users', data)
+      await addDocument(projects, data)
     }
     catch(error){
       console.log(error)
     }
   };
-
   return (
       <div className="container mx-auto py-8"> 
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>

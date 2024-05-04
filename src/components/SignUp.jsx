@@ -26,7 +26,7 @@ function SignUp() {
   return (
 <div className="flex items-center justify-center ">
   <form onSubmit={handleSubmit} 
-  className="max-w-md w-full flex flex-col gap-4 mt-48">
+  className="max-w-md w-full flex flex-col gap-4 mt-48  ">
     <h1 className="text-4xl font-semibold">Sign Up</h1>
     <div className="text-gray-300 ">
           Already have an account ? <Link href="/login">Login here</Link>
