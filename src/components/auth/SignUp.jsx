@@ -1,6 +1,6 @@
 // Create a signup form component with tailwind css
 
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import toast from "react-hot-toast";

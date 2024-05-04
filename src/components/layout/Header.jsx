@@ -1,4 +1,4 @@
-import useAuthState from "../hooks/useAuthState";
+import useAuthState from "../../hooks/useAuthState";
 import { useNavigate } from "react-router-dom";
 import { Button , Link} from "@nextui-org/react";
 
