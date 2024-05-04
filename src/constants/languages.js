@@ -5,4 +5,4 @@ export const supportedLanguages = [
   { label: "python", value: "python3", version: "3.9.9" },
   { label: "C++", value: "cpp17", version: "g++ 17 GCC 11.1.0" },
   { label: "C", value: "c", version: "GCC 11.1.0" },
-];
+]; 

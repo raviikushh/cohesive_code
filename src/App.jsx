@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { NextUIProvider } from "@nextui-org/react";
 import { Toaster } from "react-hot-toast";
-import SignUp from "./components/auth/SignUp";
+import DashboardPage from "./components/dashboard/DashboardPage";
+
 import Header from "./components/layout/Header";
-import Login from "./components/auth/Login";
-import Dashboard from "./pages/Dashboard";
-import EditorPage from "./pages/EditorPage";
-import Home from "./pages/Home";
+import HomePage from "./components/home/HomePage";
+import LoginPage from "./components/auth/LoginPage";
+import SignUpPage from "./components/auth/SignUpPage";
+import ProjectPage from "./components/project/ProjectPage";
 
 function App() {
   return (
@@ -19,11 +20,11 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/editor/:roomId" element={<EditorPage />} />
+            <Route path='/project/:projectId' element={<ProjectPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Routes>
         </BrowserRouter>
       </main>

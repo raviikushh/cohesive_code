@@ -1,9 +1,19 @@
-import { useState } from "react";
-import Client from "../components/shared/Client";
-import Editor from "../components/editor/Editor";
+import { useEffect, useState } from "react";
+import Client from "../shared/Avatar";
+import Editor from "./Editor";
 import toast from "react-hot-toast";
+import { getDocument } from "../../database";
+import { useParams } from "react-router-dom";
 
-const EditorPage = () => {
+/**
+ 
+ * 1. Get id from the url params - using react router dom
+ * 2. Fetch the project details from the database using getDoc
+ * 3. Display the project name and language in the leftbar
+ *
+ */
+const ProjectPage = () => {
+  const { projectId } = useParams();
   const [clients] = useState([
     { socketId: 1, username: "Ravi", email: "ravi@example.com" },
     { socketId: 2, username: "Adarsh", email: "adarsh@example.com" },
@@ -11,6 +21,21 @@ const EditorPage = () => {
   ]);
   const [newCollaborator, setNewCollaborator] = useState("");
   const [collaborators, setCollaborators] = useState(clients);
+  const [projectData, setProjectData] = useState(null);
+
+  const fetchProjectData = async (id) => {
+    // TODO ;Add try catch
+    // Fetch project data from the database
+    const data = await getDocument("projects", id);
+    console.log(data);
+    setProjectData(data);
+  };
+
+  useEffect(() => {
+    if (projectId) {
+      fetchProjectData(projectId);
+    }
+  }, []);
 
   const handleAddCollaborator = () => {
     if (newCollaborator) {
@@ -93,4 +118,4 @@ const EditorPage = () => {
   );
 };
 
-export default EditorPage;
+export default ProjectPage;

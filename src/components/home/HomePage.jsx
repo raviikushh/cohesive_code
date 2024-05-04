@@ -1,9 +1,22 @@
 import { Button } from "@nextui-org/react";
-import Layout from "../components/layout/Layout";
-import Icon from "../components/shared/Icon";
-import HeroSvg from "../assets/hero.svg";
+import Layout from "../layout/Layout";
+import Icon from "../shared/Icon";
+import HeroSvg from "../../assets/hero.svg";
+import { useNavigate } from "react-router-dom";
+import useAuthState from "../../hooks/useAuthState";
 
 function Home() {
+  const navigate = useNavigate();
+  const { user } = useAuthState();
+
+  const handleGetStarted = () => {
+    if (user) {
+      navigate("/dashboard");
+    } else {
+      navigate("/signup");
+    }
+  };
+
   return (
     <Layout>
       <div className="flex items-center pt-32">
@@ -16,7 +29,12 @@ function Home() {
             The collaborative coding platform that brings teams together to
             create amazing software.
           </h6>
-          <Button className="mt-4" size="lg" color="primary">
+          <Button
+            onClick={handleGetStarted}
+            className="mt-4"
+            size="lg"
+            color="primary"
+          >
             Get Started <Icon name="arrow-right" />
           </Button>
         </div>
