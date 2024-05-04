@@ -1,17 +1,27 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@nextui-org/react';
-import { addDocument } from '../hooks/database';
-import useAuthState from '../hooks/useAuthState';
+import { useState } from "react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+  Input,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
+import { addDocument } from "../database";
+import Icon from "../components/shared/Icon";
+import ProjectCard from "../components/shared/ProjectCard";
+import Layout from "../components/layout/Layout";
+import { supportedLanguages } from "../constants/languages";
 
 const Dashboard = () => {
-  const { user } = useAuthState();
-  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [newProjectName, setNewProjectName] = useState('');
-  const [newProjectLanguage, setNewProjectLanguage] = useState('');
-
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [newProjectName, setNewProjectName] = useState("");
+  const [newProjectLanguage, setNewProjectLanguage] = useState("");
 
   const handleCreateProject = async () => {
     if (newProjectName && newProjectLanguage) {
@@ -23,111 +33,89 @@ const Dashboard = () => {
 
       setProjects([...projects, newProject]);
 
-      setShowModal(false);
-      setNewProjectName('');
-      setNewProjectLanguage('');  
+      setNewProjectName("");
+      setNewProjectLanguage("");
       //   navigate(`/editor/${newProject.id}`);
     }
-    const data ={
+    const data = {
       name: newProjectName,
-      language: newProjectLanguage
+      language: newProjectLanguage,
     };
-    console.log(data)
-      // Adding data in database
-    try{
-      await addDocument(projects, data)
-    }
-    catch(error){
-      console.log(error)
+
+    // Adding data in database
+    try {
+      await addDocument(projects, data);
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
-      <div className="container mx-auto py-8"> 
-      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-      <div className="flex justify-end mb-4">
-        <Button
-        size="lg"
-          color="secondary"
-          onClick={() => setShowModal(true)}
-        >
-          Add Project
-        </Button>
-      </div>
-
-      <h2 className="text-2xl font-bold mb-4">Created By You</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 ">
-        {projects.map((project) => (
-          <div
-            key={project.id}
-            className="bg-slate-500 shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-            onClick={() => navigate(`/editor/${project.id}`)}
+    <>
+      <Layout>
+        <h6 className="text-xl text-gray-200 leading-8 ">Created by me</h6>
+        <div className="grid grid-cols-5 gap-4">
+          <ProjectCard name={"Cool Project"} language={"Java"} />
+          <ProjectCard name={"Cool Project"} language={"Java"} />
+          <ProjectCard name={"Cool Project"} language={"Java"} />
+          <button
+            onClick={() => {
+              onOpen();
+            }}
+            className=" border select-none border-default-200  text-md font-light text-default-400 aspect-video flex flex-col cursor-pointer items-center justify-center rounded-xl hover:shadow-xl hover:bg-default-100/50 hover:text-default-500 hover:border-default-300 active:scale-95 duration-200 ease-out"
           >
-            <h2 className="text-xl text-black font-bold mb-2">{project.name}</h2>
-            <p className="text-black">Language: {project.language}</p>
-          </div>
-        ))}
-      </div>
-      <h2 className="text-2xl font-bold mb-4">Shared Projects</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div className="bg-slate-500 shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                    <h2 className="text-xl text-black font-bold mb-2">Project Name</h2>
-                    <p className="text-black">Language</p>
-                </div>
-        </div>        
-
-      {showModal ? (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-slate-700 p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Create New Project</h2>
-            <div className="mb-4">
-              <label htmlFor="projectName" className="block font-bold mb-2">
-                Project Name
-              </label>
-              <input
-                type="text"
-                id="projectName"
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                value={newProjectName}
-                onChange={(e) => setNewProjectName(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="projectLanguage" className="block font-bold mb-2">
-                Language
-              </label>
-              <select
-                id="projectLanguage"
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                value={newProjectLanguage}
-                onChange={(e) => setNewProjectLanguage(e.target.value)}
-              >
-                <option value="">Select Language</option>
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="java">Java</option>
-              </select>
-            </div>
-            <div className="flex justify-end gap-4">
-              <Button
-                color="secondary"
-                type="submit"
-                size="lg "
-                onClick={handleCreateProject}
-              >
-                Create Project
-              </Button>
-              <Button
-                color="primary"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
+            <Icon name="plus" size={32} />
+            Create a new project
+          </button>
         </div>
-      ) : null}
-    </div>
+        <h6 className="text-xl text-gray-200 leading-8">Shared with me</h6>
+        <p className="text-default-400">No projects shared with you.</p>
+      </Layout>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          <ModalHeader>
+            <h5>Create a new project</h5>
+          </ModalHeader>
+          <ModalBody>
+            <Input
+              type="text"
+              label="Project Name"
+              labelPlacement="outside"
+              value={newProjectName}
+              placeholder="Enter project name"
+              onChange={(e) => setNewProjectName(e.target.value)}
+              className="input"
+              variant="faded"
+            />
+            {/* TODO : Add Select component here */}
+            <Select
+              label="Language"
+              labelPlacement="outside"
+              placeholder="Select a language"
+              variant="faded"
+              onChange={(e) => setNewProjectLanguage(e.target.value)}
+            >
+              {supportedLanguages.map((lang) => (
+                <SelectItem key={lang.value} value={lang.value}>
+                  {lang.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="default" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              className="font-medium"
+              onClick={handleCreateProject}
+            >
+              Create Project
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
-
 export default Dashboard;

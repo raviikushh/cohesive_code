@@ -1,33 +1,54 @@
 import useAuthState from "../../hooks/useAuthState";
 import { useNavigate } from "react-router-dom";
-import { Button , Link} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
+import Icon from "../shared/Icon";
 
 function Header() {
   const navigate = useNavigate();
   const { user, logout } = useAuthState();
 
   return (
-    <header className="h-16 ">
-      <nav className="flex items-center justify-between py-4 px-6">
-      <Link href="/"><div className="font-medium uppercase cursor-pointer" >Cohesive Code</div></Link>  
+    <nav className="flex container mx-auto items-center justify-between h-16">
+      <div
+        onClick={() => navigate("/")}
+        className="font-semibold flex gap-2.5 uppercase group items-center text-primary-400 hover:text-secondary-400 cursor-pointer text-xl  "
+      >
+        <Icon
+          strokeWidth={3}
+          name="code"
+          className="group-hover:rotate-90 duration-500 ease-in-out"
+        />{" "}
+        Cohesive Code
+      </div>
 
-        <div className="flex gap-4">
-          {user === null ? (
-            <>
-              <Button color="primary" onClick={() => navigate("/login")}>Login</Button>
-              <Button color="secondary" onClick={() => navigate("/signup")} href="/signup">
-                Sign Up
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button onClick={() => navigate("/dashboard")}>Dashboard</Button>
-              <Button color="primary" onClick={logout}>Logout</Button>
-            </>
-          )}
-        </div>
-      </nav>
-    </header>
+      <div className="flex gap-4">
+        {user === null ? (
+          <>
+            <Button color="primary" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+            <Button
+              color="secondary"
+              onClick={() => navigate("/signup")}
+              href="/signup"
+            >
+              Sign Up
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={() => navigate("/dashboard")} variant="solid">
+              <Icon name="layout-dashboard" size={16} />
+              Dashboard
+            </Button>
+            <Button color="primary" onClick={logout}>
+              Logout
+              <Icon name="log-out" size={16} />
+            </Button>
+          </>
+        )}
+      </div>
+    </nav>
   );
 }
 
