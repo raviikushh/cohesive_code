@@ -15,6 +15,7 @@ import { useState } from "react";
 import useAuthState from "../../hooks/useAuthState";
 import { supportedLanguages } from "../../constants/languages";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
 
   const handleCreateProject = async () => {
     // Adding data in database
+    if(!projectName || !projectLanguage)  toast.error('Please fill all the fields');
+    else { 
     try {
       const data = {
         name: projectName,
@@ -33,10 +36,11 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
       const response = await addDocument("/projects", data);
       console.log(response.id);
       onClose();
-      navigate(`/project/${response.id}`);
+      navigate(`/dashboard/${response.id}`);
     } catch (error) {
       console.log(error);
     }
+  }
   };
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

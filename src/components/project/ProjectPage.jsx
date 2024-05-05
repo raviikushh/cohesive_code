@@ -25,10 +25,15 @@ const ProjectPage = () => {
 
   const fetchProjectData = async (id) => {
     // TODO ;Add try catch
+    try{
+      const data = await getDocument("projects", id);
+      console.log(data);
+      setProjectData(data);
+    }
     // Fetch project data from the database
-    const data = await getDocument("projects", id);
-    console.log(data);
-    setProjectData(data);
+    catch(error){
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -56,9 +61,11 @@ const ProjectPage = () => {
       <div className="w-64 flex flex-col justify-between bg-gray-800 text-white p-4">
         <div>
           <h2 className="text-2xl font-semibold mb-2 text-blue-400">
-            Project Name
+            {projectData?.name || "Project Name"}
           </h2>
-          <h3 className="text-lg mb-6 text-green-400">Language</h3>
+          <h3 className="text-lg mb-6 text-green-400">
+            {projectData?.language || "Language"}
+          </h3>
           <div className="mb-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Collaborators</h3>

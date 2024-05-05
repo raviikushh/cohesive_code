@@ -20,11 +20,12 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path='/project/:projectId' element={<ProjectPage />} />
+            <Route path='/project/:projectId' element={<ProjectPage />} / >
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/dashboard/:projectId" element={<DashboardPage />} />
           </Routes>
         </BrowserRouter>
       </main>
