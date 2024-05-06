@@ -4,6 +4,9 @@ import Editor from "./Editor";
 import toast from "react-hot-toast";
 import { getDocument } from "../../database";
 import { useParams } from "react-router-dom";
+import Layout from "../layout/Layout";
+import { Button } from "@nextui-org/react";
+import Icon from "../shared/Icon";
 
 /**
  
@@ -25,13 +28,12 @@ const ProjectPage = () => {
 
   const fetchProjectData = async (id) => {
     // TODO ;Add try catch
-    try{
+    try {
       const data = await getDocument("projects", id);
       console.log(data);
       setProjectData(data);
-    }
-    // Fetch project data from the database
-    catch(error){
+    } catch (error) {
+      // Fetch project data from the database
       console.error(error);
     }
   };
@@ -56,72 +58,47 @@ const ProjectPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-900">
-      {/* leftbar */}
-      <div className="w-64 flex flex-col justify-between bg-gray-800 text-white p-4">
-        <div>
-          <h2 className="text-2xl font-semibold mb-2 text-blue-400">
-            {projectData?.name || "Project Name"}
-          </h2>
-          <h3 className="text-lg mb-6 text-green-400">
-            {projectData?.language || "Language"}
+    <Layout>
+      <div className="grid grid-cols-4 h-[calc(100vh-80px)] gap-4">
+        {/* Left Sidebar  */}
+        <div className="col-span-1 overflow-hidden  border border-default-300   rounded-xl">
+          <h3 className="text-lg  text-green-400 border-b px-3 border-default-300 py-2 bg-default-100">
+            Collaborators
           </h3>
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Collaborators</h3>
-              <button
-                onClick={handleAddCollaborator}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-md transition-colors duration-300 shadow-md"
-              >
-                Add
-              </button>
+          <div className="py-2 px-3">
+            <div className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center">
+              <span className="rounded-full uppercase bg-indigo-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
+                A
+              </span>
+              ayushmaaan@gmail.com
             </div>
-            <div className="collaboratorsList flex flex-col gap-2">
-              {collaborators.map((collaborator) => (
-                <div
-                  key={collaborator.socketId}
-                  className="bg-gray-700 rounded-md p-2 text-sm shadow-md"
-                >
-                  {collaborator.email}
-                </div>
-              ))}
+            <div className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center">
+              <span className="rounded-full uppercase bg-green-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
+                D
+              </span>
+              deepchaulya@gmail.com
             </div>
-            <div className="addCollaborator flex gap-2 mt-4">
-              <input
-                type="text"
-                placeholder="Add new collaborator"
-                value={newCollaborator}
-                onChange={(e) => setNewCollaborator(e.target.value)}
-                className="flex-1 rounded-md bg-gray-700 text-white px-2 py-1 shadow-md"
-              />
+
+            <div className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center">
+              <span className="rounded-full uppercase bg-orange-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
+                S
+              </span>
+              swararoul@gmail.com
             </div>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Online</h3>
-            <div className="clientsList flex flex-col gap-2">
-              {clients.map((client) => (
-                <Client
-                  key={client.socketId}
-                  username={client.username}
-                  className="bg-gray-700 rounded-md p-2 text-sm shadow-md"
-                />
-              ))}
-            </div>
+          <Button color="primary" fullWidth radius="sm" className="mt-4">
+            <Icon name={"plus"} size={16} />
+            Add Collaborator
+          </Button>
           </div>
         </div>
-        <div className="buttonContainer flex gap-2">
-          <button className="btn bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-300 shadow-md flex-1">
-            LEAVE
-          </button>
+        {/* Editor */}
+        <div className="col-span-3 border-1 overflow-hidden border-default-300 rounded-xl ">
+          {projectData && <Editor project={projectData} />}
         </div>
+        {/* Console */}
       </div>
-      {/* editor */}
-      <div className="flex-1 p-4">
-        <div className="bg-gray-800 rounded-md p-4 shadow-md h-full">
-          <Editor />
-        </div>
-      </div>
-    </div>
+      {/* leftbar */}
+    </Layout>
   );
 };
 

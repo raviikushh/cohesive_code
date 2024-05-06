@@ -3,54 +3,45 @@ import { useRef, useState } from "react";
 import Output from "./Output";
 import { supportedLanguages } from "../../constants/languages";
 
-
-const CustomEditor = () => {
+const CustomEditor = ({ project }) => {
   const editorRef = useRef(null);
   const [value, setValue] = useState("");
   const [language, setLanguage] = useState(supportedLanguages[0]);
+
+  const getLanguageLabel = (value) => {
+    return supportedLanguages.find((lang) => lang.value === value).label;
+  };
 
   const onMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
   };
 
-  // Function to handle language change
-  const handleLanguageChange = (e) => {
-    setLanguage(
-      supportedLanguages.find((lang) => lang.value === e.target.value)
-    );
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-900">
-      <div className="mb-4">
-        <select
-          value={language.value}
-          onChange={handleLanguageChange}
-          className="bg-gray-800 text-white px-4 py-2 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 top-0"
-        >
-          {supportedLanguages.map((lang) => (
-            <option key={lang.value} value={lang.value}>
-              {lang.label} {lang.version}
-            </option>
-          ))}
-        </select>
+    <div className="grid grid-rows-4 h-full bg-default-100">
+      <div className="row-span-3 flex flex-col">
+        <div className="border-b-[1px] border-default-300 p-2">
+          {project.name} | {getLanguageLabel(project.language)}
+        </div>
+        <div className="flex-1">
+          <Editor
+            theme="vs-dark"
+            defaultLanguage={'javascript'}
+            defaultValue=""
+            onMount={onMount}
+            value={value}
+            onChange={(value) => setValue(value)}
+            loader={loader}
+          />
+        </div>
       </div>
-      <Editor
-        height="75vh"
-        theme="vs-dark"
-        defaultLanguage={language.value}
-        defaultValue="// Write code here"
-        onMount={onMount}
-        value={value}
-        onChange={(value) => setValue(value)}
-        loader={loader}
-      />
-      <Output
-        editorRef={editorRef}
-        language={language.value}
-        version={language.version}
-      />
+      <div>
+        <Output
+          editorRef={editorRef}
+          language={language.value}
+          version={language.version}
+        />
+      </div>
     </div>
   );
 };
