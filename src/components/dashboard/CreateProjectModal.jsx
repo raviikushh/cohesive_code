@@ -36,7 +36,7 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
       const response = await addDocument("/projects", data);
       console.log(response.id);
       onClose();
-      navigate(`/dashboard/${response.id}`);
+      navigate(`/project/${response.id}`);
     } catch (error) {
       console.log(error);
     }
