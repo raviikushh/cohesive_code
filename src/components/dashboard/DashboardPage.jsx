@@ -5,6 +5,8 @@ import CreateProjectModal from "./CreateProjectModal";
 import { useDisclosure } from "@nextui-org/react";
 import useAuthState from "../../hooks/useAuthState";
 import { useNavigate } from "react-router-dom";
+import { getProjectsByUser } from "../../database";
+import { useEffect, useState } from "react";
 
 /**
  * TODO 
@@ -14,22 +16,26 @@ import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const {user} = useAuthState();    // use user.uid to get currrent users id
-  // const [projects,setProjects] = useState([]);
+  const { user } = useAuthState(); // use user.uid to get currrent users id
+  const [projects, setProjects] = useState([]);
 
+  const fetchProjects = async (userId) => {
+    const projects = await getProjectsByUser(userId);
+    console.log(projects);
+    setProjects(projects);
+  };
 
-  const fetchProjects = async (projectId) => {
-    // Write query to get docs from 'projects' collection where 'created_by' is equal to current user's uid.
-  
-  }
-// console.log("Projects",projects);
-
+  useEffect(() => {
+    if (user) {
+      fetchProjects(user.uid);
+    }
+  }, [user]);
 
   const { onOpen, isOpen, onClose, onOpenChange } = useDisclosure(
     "create-project-modal"
   );
-  if(!user){
-    navigate('/login');
+  if (!user) {
+    navigate("/login");
   }
 
   return (
@@ -39,7 +45,9 @@ const DashboardPage = () => {
         <div className="grid grid-cols-5 gap-4">
           {/* Display all projects created by the user */}
           {/* <ProjectCard name={projects.name} language={projects.language} /> */}
-          <ProjectCard name={"Cool Project"} language={"Java"} />
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
           <button
             onClick={() => {
               onOpen();

@@ -1,4 +1,4 @@
-import { addDoc, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, collection, where } from "firebase/firestore";
+import { addDoc, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, collection, where, query } from "firebase/firestore";
 import { db } from "./firebase";
 
 // REFERENC DOCS : https://firebase.google.com/docs/firestore/manage-data/add-data
@@ -60,7 +60,7 @@ export const getDocument = async (collection, docId) => {
 // Fetch multiple documents from a collection using a query
 export const getProjectsByUser = async (userId) => {
   const q = query(collection(db, "projects"), where("created_by", "==", userId));
-return queryDocuments(q);
+  return await queryDocuments(q);
 }
 
 export const getSharedProjectsByUser = async (userId) => {
