@@ -12,12 +12,12 @@ const Output = ({ editorRef, language, version }) => {
     if (!code) return;
 
     const options = {
-      method: "POST",
-      url: "https://online-code-compiler.p.rapidapi.com/v1/",
+      method: 'POST',
+      url: 'https://online-code-compiler.p.rapidapi.com/v1/',
       headers: {
-        "content-type": "application/json",
-        "X-RapidAPI-Key": "bec9864a4fmsh665a432e8b06093p133bffjsn10fff835ae51",
-        "X-RapidAPI-Host": "online-code-compiler.p.rapidapi.com",
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': 'a400844a2fmshbbf5445a01b5285p113bf9jsnaec9ec9e84f1',
+        'X-RapidAPI-Host': 'online-code-compiler.p.rapidapi.com'
       },
       data: {
         language,
