@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Client from "../shared/Avatar";
 import Editor from "./Editor";
 import toast from "react-hot-toast";
-import { getDocument } from "../../database";
+import { addCollaborator, getDocument } from "../../database";
 import { useParams } from "react-router-dom";
 import Layout from "../layout/Layout";
 import { Button } from "@nextui-org/react";
@@ -18,13 +18,6 @@ import { useDisclosure } from "@nextui-org/react";
  */
 const ProjectPage = () => {
   const { projectId } = useParams();
-  const [clients] = useState([
-    { socketId: 1, username: "Ravi", email: "ravi@example.com" },
-    { socketId: 2, username: "Adarsh", email: "adarsh@example.com" },
-    { socketId: 3, username: "Nayak", email: "nayak@example.com" },
-  ]);
-  const [newCollaborator, setNewCollaborator] = useState("");
-  const [collaborators, setCollaborators] = useState(clients);
   const [projectData, setProjectData] = useState(null);
 
   const fetchProjectData = async (id) => {
@@ -38,7 +31,19 @@ const ProjectPage = () => {
       console.error(error);
     }
   };
-
+  const handleAddCollaboartor = async (collaboartor) => {
+    // Adding data in database
+    if(!collaboartor)  toast.error('Please enter collaborator email');
+    else { 
+    try {
+      const response = await addCollaborator("/projects", projectId, collaboartor);
+      fetchProjectData(projectId);
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  };
   useEffect(() => {
     if (projectId) {
       fetchProjectData(projectId);
@@ -48,7 +53,7 @@ const ProjectPage = () => {
   
 
   const {isOpen, onClose, onOpen, onOpenChange} = useDisclosure('add-collaborator-modal');
-
+  // console.log("projectData",projectData.collaborators[0]);
 
   return (
     <Layout>
@@ -59,25 +64,14 @@ const ProjectPage = () => {
             Collaborators
           </h3>
           <div className="py-2 px-3">
-            <div className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center">
-              <span className="rounded-full uppercase bg-indigo-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
-                A
+            {projectData && projectData.collaborators.map((collaborator) =>(
+            <div key={collaborator} className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center">
+              <span className="rounded-full uppercase bg-primary-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
+                {collaborator[0].toUpperCase()}
               </span>
-              ayushmaaan@gmail.com
+              {collaborator}
             </div>
-            <div className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center">
-              <span className="rounded-full uppercase bg-green-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
-                D
-              </span>
-              deepchaulya@gmail.com
-            </div>
-
-            <div className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center">
-              <span className="rounded-full uppercase bg-orange-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
-                S
-              </span>
-              swararoul@gmail.com
-            </div>
+            ))}
             
           <Button color="primary" fullWidth radius="sm" className="mt-4" onClick={onOpen}>
             <Icon name={"plus"} size={16} />
@@ -92,7 +86,9 @@ const ProjectPage = () => {
         {/* Console */}
       </div>
       {/* leftbar */}
-      <AddCollaborator 
+      <AddCollaborator  
+      handleAddCollaboartor={handleAddCollaboartor}
+      projectId={projectId}
       isOpen={isOpen}
       onClose={onClose}
       onOpenChange={onOpenChange}

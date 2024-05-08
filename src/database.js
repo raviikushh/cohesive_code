@@ -1,4 +1,4 @@
-import { addDoc, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, collection, where, query } from "firebase/firestore";
+import { addDoc, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, collection, where, query, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "./firebase";
 
 // REFERENC DOCS : https://firebase.google.com/docs/firestore/manage-data/add-data
@@ -37,6 +37,12 @@ export const addDocument = (collectionName,data) =>{
 export const updateDocument = (collection, docId, data) => {
   const ref = doc(db, collection, docId);
   return updateDoc(ref, {...data, updated_at: serverTimestamp()});
+}
+
+// Add Collaborators in Array
+export const addCollaborator = (collection, docId, data) => {
+  const ref = doc(db, collection, docId);
+  return updateDoc(ref, { collaborators: arrayUnion(data) }); 
 }
 
 export const deleteDocument = (collection, docId) => {

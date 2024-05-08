@@ -7,32 +7,11 @@ import {
     ModalHeader,
     Input,
   } from "@nextui-org/react";
-  
-  import { addDocument } from "../../database";
   import { useState } from "react";
-  import useAuthState from "../../hooks/useAuthState";
-  import { useNavigate } from "react-router-dom";
-  import toast from "react-hot-toast";
   
-  function AddCollaborator({ isOpen, onOpenChange, onClose }) {
-    const navigate = useNavigate();
-    const { user } = useAuthState();
+  function AddCollaborator({ isOpen, onOpenChange, onClose , projectId,handleAddCollaboartor}) {
     const [collaboartor, setNewCollaborator] = useState("");
   
-    const handleAddCollaboartor = async () => {
-      // Adding data in database
-      if(!collaboartor)  toast.error('Please enter collaborator email');
-      else { 
-      try {
-        const data = {
-        };
-        onClose();
-        navigate(`/project/${response.id}`);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    };
     return (
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
@@ -58,7 +37,7 @@ import {
             <Button
               color="primary"
               className="font-medium"
-              onClick={handleAddCollaboartor}
+              onClick={()=>handleAddCollaboartor(collaboartor)}
             >
               ADD
             </Button>
