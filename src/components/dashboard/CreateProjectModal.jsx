@@ -31,6 +31,7 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
       const data = {
         name: projectName,
         collaborators : [],
+        // Add field to save code to the database
         language: projectLanguage,
         created_by: user.uid,
       };

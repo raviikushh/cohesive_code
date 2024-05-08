@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Client from "../shared/Avatar";
 import Editor from "./Editor";
 import toast from "react-hot-toast";
 import { addCollaborator, getDocument } from "../../database";
