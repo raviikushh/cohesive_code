@@ -30,6 +30,7 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
     try {
       const data = {
         name: projectName,
+        collaborators : [],
         language: projectLanguage,
         created_by: user.uid,
       };

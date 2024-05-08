@@ -8,8 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { getProjectsByUser } from "../../database";
 import { useEffect, useState } from "react";
 import SharedProjectCard from "./SharedProjectCard";
-import { Projector } from "lucide-react";
-import { languages } from "monaco-editor/esm/metadata";
 
 /**
  * TODO 
@@ -82,9 +80,9 @@ const DashboardPage = () => {
         {/* <p className="text-default-400">No projects shared with you.</p> */}
       </Layout>
       <CreateProjectModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpenChange={onOpenChange}
+      isOpen={isOpen}
+      onClose={onClose}
+      onOpenChange={onOpenChange}
       />
     </>
   );

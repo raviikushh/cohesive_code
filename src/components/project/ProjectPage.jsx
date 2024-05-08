@@ -7,7 +7,8 @@ import { useParams } from "react-router-dom";
 import Layout from "../layout/Layout";
 import { Button } from "@nextui-org/react";
 import Icon from "../shared/Icon";
-
+import AddCollaborator from "./AddCollaborators";
+import { useDisclosure } from "@nextui-org/react";
 /**
  
  * 1. Get id from the url params - using react router dom
@@ -44,18 +45,10 @@ const ProjectPage = () => {
     }
   }, []);
 
-  const handleAddCollaborator = () => {
-    if (newCollaborator) {
-      const newId = collaborators.length + 1;
-      const newCollaboratorObj = { socketId: newId, email: newCollaborator };
-      setCollaborators([...collaborators, newCollaboratorObj]);
-      console.log(collaborators);
-      setNewCollaborator("");
-      toast.success("Collaborator added successfully");
-    } else {
-      toast.error("Please enter a collaboartor email");
-    }
-  };
+  
+
+  const {isOpen, onClose, onOpen, onOpenChange} = useDisclosure('add-collaborator-modal');
+
 
   return (
     <Layout>
@@ -85,7 +78,8 @@ const ProjectPage = () => {
               </span>
               swararoul@gmail.com
             </div>
-          <Button color="primary" fullWidth radius="sm" className="mt-4">
+            
+          <Button color="primary" fullWidth radius="sm" className="mt-4" onClick={onOpen}>
             <Icon name={"plus"} size={16} />
             Add Collaborator
           </Button>
@@ -98,6 +92,11 @@ const ProjectPage = () => {
         {/* Console */}
       </div>
       {/* leftbar */}
+      <AddCollaborator 
+      isOpen={isOpen}
+      onClose={onClose}
+      onOpenChange={onOpenChange}
+      />
     </Layout>
   );
 };

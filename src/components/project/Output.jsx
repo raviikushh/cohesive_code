@@ -6,7 +6,7 @@ import { useState } from "react";
 const Output = ({ editorRef, language, version }) => {
   const [loading, setLoading] = useState(false);
   const [output, setOutput] = useState("");
-  console.log({ version });
+
   const runCode = async () => {
     const code = editorRef.current.getValue();
     if (!code) return;
