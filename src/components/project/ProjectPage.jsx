@@ -51,19 +51,11 @@ const handleDelete = async (collaborator) => {
     console.error(error);
   }
 }
-  const getRealtimeDoc= async (id) => {
-    try {
-      const data = await getRealtimeDocument("projects", id);
-      console.log("realtime data ",data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+
 
   useEffect(() => {
     if (projectId) {
       fetchProjectData(projectId);
-      getRealtimeDoc(projectId);
     }
   }, []);
 

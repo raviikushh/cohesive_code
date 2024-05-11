@@ -70,15 +70,6 @@ export const getDocument = async (collection, docId) => {
   }
 }
 
-// ----------------------------------------------------------------------------------------
-// Realtime Database
-// ----------------------------------------------------------------------------------------
-export const getRealtimeDocument = (collection, docId) => {
-  const ref = doc(db, collection, docId);
-    onSnapshot(ref, (doc) => {
-    
-   });
-};
 
 
 
