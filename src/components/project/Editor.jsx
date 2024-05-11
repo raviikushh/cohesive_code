@@ -7,6 +7,7 @@ import { Button } from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
+import debounce from "lodash.debounce";
 
 const CustomEditor = ({ project, projectId }) => {
   const editorRef = useRef(null);
@@ -21,6 +22,7 @@ const CustomEditor = ({ project, projectId }) => {
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "projects", projectId), (doc) => {
       setValue(doc.data().code);
+      console.log("Document data:", doc.data().code);
     });
     return () => {
       unsub();
@@ -28,16 +30,16 @@ const CustomEditor = ({ project, projectId }) => {
   }, [db]);
 
   //Update code in the document
-  const updateCodeInDb = async (projectId, value) => {
+  const updateCodeInDb = debounce(async (projectId, value) => {
     try {
       await updateCode("/projects", projectId, value);
     } catch (error) {
       console.error(error);
     }
-  };
+  },1000);
 
   const handleCodeChange = async (value) => {
-    await updateCode("/projects", projectId, value);
+    await updateCodeInDb(projectId, value);
   };
 
   const onMount = (editor) => {
