@@ -1,4 +1,4 @@
-import { addDoc, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, collection, where, query, arrayUnion, arrayRemove } from "firebase/firestore";
+import { addDoc, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, collection, where, query, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
 import { db } from "./firebase";
 
 // REFERENC DOCS : https://firebase.google.com/docs/firestore/manage-data/add-data
@@ -20,7 +20,6 @@ import { db } from "./firebase";
 // };
 // await setDoc(doc(db, "data", "one"), docData);
 
-
 // This is useful when we want to set a document with a specific id 
 export const setDocument = (collection, docId, data) => {
   const ref = doc(db, collection, docId);
@@ -38,11 +37,22 @@ export const updateDocument = (collection, docId, data) => {
   const ref = doc(db, collection, docId);
   return updateDoc(ref, {...data, updated_at: serverTimestamp()});
 }
+// Update code in database String : code
+export const updateCode = (collection, docId, data) => {
+  const ref = doc(db, collection, docId);
+  return updateDoc(ref, { code: data, updated_at: serverTimestamp()});
+}
 
 // Add Collaborators in Array
 export const addCollaborator = (collection, docId, data) => {
   const ref = doc(db, collection, docId);
   return updateDoc(ref, { collaborators: arrayUnion(data) }); 
+}
+
+// Delete Collaborators in Array
+export const deleteCollaborator = (collection, docId, data) => {
+  const ref = doc(db, collection, docId);
+  return updateDoc(ref, { collaborators: arrayRemove(data) }); 
 }
 
 export const deleteDocument = (collection, docId) => {
@@ -59,6 +69,19 @@ export const getDocument = async (collection, docId) => {
     return null;
   }
 }
+
+// ----------------------------------------------------------------------------------------
+// Realtime Database
+// ----------------------------------------------------------------------------------------
+export const getRealtimeDocument = (collection, docId) => {
+  const ref = doc(db, collection, docId);
+    onSnapshot(ref, (doc) => {
+    
+   });
+};
+
+
+
 
 
 // For query reference - check get multiple documents from a collection in https://firebase.google.com/docs/firestore/query-data/get-data

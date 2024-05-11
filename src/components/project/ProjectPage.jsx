@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import Editor from "./Editor";
 import toast from "react-hot-toast";
-import { addCollaborator, getDocument } from "../../database";
+import { addCollaborator, getDocument, deleteCollaborator } from "../../database";
 import { useParams } from "react-router-dom";
 import Layout from "../layout/Layout";
 import { Button } from "@nextui-org/react";
 import Icon from "../shared/Icon";
 import AddCollaborator from "./AddCollaborators";
 import { useDisclosure } from "@nextui-org/react";
+import { getRealtimeDocument } from "../../database";
 /**
  
  * 1. Get id from the url params - using react router dom
@@ -23,15 +24,13 @@ const ProjectPage = () => {
     // TODO ;Add try catch
     try {
       const data = await getDocument("projects", id);
-      console.log(data);
       setProjectData(data);
     } catch (error) {
-      // Fetch project data from the database
       console.error(error);
     }
   };
   const handleAddCollaboartor = async (collaboartor) => {
-    // Adding data in database
+    // Adding collaborator in database
     if(!collaboartor)  toast.error('Please enter collaborator email');
     else { 
     try {
@@ -43,9 +42,28 @@ const ProjectPage = () => {
     }
   }
   };
+const handleDelete = async (collaborator) => {
+  try {
+    await deleteCollaborator("/projects", projectId, collaborator);
+    fetchProjectData(projectId);
+    toast.success("Collaborator deleted successfully");
+  } catch (error) {
+    console.error(error);
+  }
+}
+  const getRealtimeDoc= async (id) => {
+    try {
+      const data = await getRealtimeDocument("projects", id);
+      console.log("realtime data ",data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     if (projectId) {
       fetchProjectData(projectId);
+      getRealtimeDoc(projectId);
     }
   }, []);
 
@@ -69,6 +87,7 @@ const ProjectPage = () => {
                 {collaborator[0].toUpperCase()}
               </span>
               {collaborator}
+              <Icon onClick={()=>handleDelete(collaborator)} name="x" size={16} className="ml-auto" />
             </div>
             ))}
             
@@ -80,7 +99,7 @@ const ProjectPage = () => {
         </div>
         {/* Editor */}
         <div className="col-span-3 border-1 overflow-hidden border-default-300 rounded-xl ">
-          {projectData && <Editor project={projectData} />}
+          {projectData && <Editor project={projectData} projectId={projectId}/>}
         </div>
         {/* Console */}
       </div>

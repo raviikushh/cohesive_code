@@ -31,8 +31,8 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
       const data = {
         name: projectName,
         collaborators : [],
-        // Add field to save code to the database
         language: projectLanguage,
+        code : '',
         created_by: user.uid,
       };
       const response = await addDocument("/projects", data);
@@ -64,7 +64,7 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
           {/* TODO : Add Select component here */}
           <Select
             label="Language"
-            labelPlacement="outside"
+            labelPlacement="outside"  
             placeholder="Select a language"
             variant="faded"
             value={projectLanguage}

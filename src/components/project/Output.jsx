@@ -26,7 +26,6 @@ const Output = ({ editorRef, language, version }) => {
         input: null,
       },
     };
-
     try {
       setLoading(true);
       const response = await axios.request(options);
@@ -56,10 +55,5 @@ const Output = ({ editorRef, language, version }) => {
   );
 };
 
-Output.propTypes = {
-  editorRef: PropTypes.object.isRequired,
-  language: PropTypes.string.isRequired,
-  version: PropTypes.string.isRequired,
-};
 
 export default Output;
