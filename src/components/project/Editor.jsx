@@ -10,7 +10,7 @@ import { db } from "../../firebase";
 
 const CustomEditor = ({ project, projectId }) => {
   const editorRef = useRef(null);
-
+  const [value, setValue] = useState(project.code);
   const getLanguageLabel = (value) => {
     return supportedLanguages.find((lang) => lang.value === value).label;
   };
@@ -20,7 +20,7 @@ const CustomEditor = ({ project, projectId }) => {
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "projects", projectId), (doc) => {
-      console.log("Current data: ", doc.data());
+      setValue(doc.data().code);
     });
     return () => {
       unsub();
@@ -34,6 +34,10 @@ const CustomEditor = ({ project, projectId }) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleCodeChange = async (value) => {
+    await updateCode("/projects", projectId, value);
   };
 
   const onMount = (editor) => {
@@ -62,9 +66,8 @@ const CustomEditor = ({ project, projectId }) => {
             defaultValue={project.code}
             onMount={onMount}
             loader={loader}
-            onChange={async (value) => {
-              await updateCode("/projects", projectId, value);
-            }}
+            value={value}
+            onChange={handleCodeChange}
           />
         </div>
       </div>
