@@ -9,7 +9,7 @@ import {
   } from "@nextui-org/react";
   import { useState } from "react";
   
-  function AddCollaborator({ isOpen, onOpenChange, onClose , projectId,handleAddCollaboartor}) {
+  function AddCollaborator({handleAddCollaboartor,projectId, isOpen, onClose ,onOpenChange,  }) {
     const [collaboartor, setNewCollaborator] = useState("");
   
     return (
