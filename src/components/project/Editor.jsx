@@ -4,7 +4,6 @@ import Output from "./Output";
 import { supportedLanguages } from "../../constants/languages";
 import { updateCode } from "../../database";
 import { Button } from "@nextui-org/react";
-import toast from "react-hot-toast";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import debounce from "lodash.debounce";
@@ -26,7 +25,7 @@ const CustomEditor = ({ project, projectId }) => {
     });
     return () => {
       unsub();
-    };
+    };  
   }, [db]);
 
   //Update code in the document

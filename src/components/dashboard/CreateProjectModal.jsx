@@ -10,7 +10,7 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 
-import { addDocument } from "../../database";
+import { addDocument, setDocument } from "../../database";
 import { useState } from "react";
 import useAuthState from "../../hooks/useAuthState";
 import { supportedLanguages } from "../../constants/languages";
@@ -30,12 +30,18 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
     try {
       const data = {
         name: projectName,
-        collaborators : [],
         language: projectLanguage,
         code : '',
         created_by: user.uid,
       };
+      const dataforCollaborator = {
+        admin: user.email,
+        online : [],
+        collaborators : []
+      };
       const response = await addDocument("/projects", data);
+      const reponseForCollaborator = await setDocument("/room", response.id, dataforCollaborator);
+      const responseForShared = await setDocument("/shared", user.email, {projects: []});
       console.log(response.id);
       onClose();
       navigate(`/project/${response.id}`);

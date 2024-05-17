@@ -35,9 +35,6 @@ const DashboardPage = () => {
   const { onOpen, isOpen, onClose, onOpenChange } = useDisclosure(
     "create-project-modal"
   );
-  if (!user) {
-    navigate("/login");
-  }
 
   return (
     <>

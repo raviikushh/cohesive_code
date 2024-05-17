@@ -1,7 +1,12 @@
 import toast from "react-hot-toast";
 import {
   addCollaborator,
+  addProjectsInShared,
   deleteCollaborator,
+  deleteProjectsInShared,
+  getDocument,
+  setDocument,
+  updateDocument,
 } from "../../database";
 import Layout from "../layout/Layout";
 import { Button } from "@nextui-org/react";
@@ -9,13 +14,14 @@ import Icon from "../shared/Icon";
 import AddCollaborator from "./AddCollaborators";
 import { useDisclosure } from "@nextui-org/react";
 import {useEffect} from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useState } from "react";
 
 const Collaborators = ({projectId, projectData}) => {
   const [colValue, setColValue] = useState("");
 
+    // Handle Online Users
 
     const handleAddCollaboartor = async (collaboartor) => {
       // Adding collaborator in database
@@ -23,10 +29,11 @@ const Collaborators = ({projectId, projectData}) => {
     else{
         try {
           const response = await addCollaborator(
-            "/projects",
+            "/room",
             projectId,
             collaboartor
           );
+          const responseForShared = await addProjectsInShared("/shared", collaboartor,  projectId);
           onClose();
         } catch (error) {
           console.log(error);
@@ -36,7 +43,8 @@ const Collaborators = ({projectId, projectData}) => {
   
     const handleDelete = async (collaborator) => {
       try {
-        await deleteCollaborator("/projects", projectId, collaborator);
+        await deleteCollaborator("/room", projectId, collaborator);
+        await deleteProjectsInShared("/shared", collaborator, projectId);
         toast.success(`${collaborator} deleted successfully`);
       } catch (error) {
         console.error(error);
@@ -48,13 +56,15 @@ const Collaborators = ({projectId, projectData}) => {
     );
     // console.log("projectData",projectData.collaborators[0]);
     useEffect(() => {
-      const unsub = onSnapshot(doc(db, "projects", projectId), (doc) => {
+      const unsub = onSnapshot(doc(db, "/room", projectId), (doc) => {
         setColValue(doc.data().collaborators);
       });
       return () => {
         unsub();
       };
     }, [db]);
+
+
     return (
       <Layout>
         <div className="">
@@ -64,7 +74,7 @@ const Collaborators = ({projectId, projectData}) => {
               Collaborators
             </h3>
             <div className="py-2 px-3">
-              {projectData &&
+              {colValue &&
                 colValue.map((collaborator) => (
                   <div
                     key={collaborator}
@@ -99,7 +109,6 @@ const Collaborators = ({projectId, projectData}) => {
         {/* leftbar */}
         <AddCollaborator
           handleAddCollaboartor={handleAddCollaboartor}
-          projectId={projectId}
           isOpen={isOpen}
           onClose={onClose}
           onOpenChange={onOpenChange}

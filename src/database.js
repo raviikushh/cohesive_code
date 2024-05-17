@@ -55,6 +55,30 @@ export const deleteCollaborator = (collection, docId, data) => {
   return updateDoc(ref, { collaborators: arrayRemove(data) }); 
 }
 
+// Add projects in Shared
+export const addProjectsInShared = (collection, docId, data) => {
+  const ref = doc(db, collection, docId);
+  return updateDoc(ref, { projects: arrayUnion(data) }); 
+}
+
+// Delete projects in Shared
+export const deleteProjectsInShared = (collection, docId, data) => {
+  const ref = doc(db, collection, docId);
+  return updateDoc(ref, { projects: arrayRemove(data) }); 
+}
+
+// Add online Users in Array
+export const addOnlineUsers = (collection, docId, data) => {
+  const ref = doc(db, collection, docId);
+  return updateDoc(ref, { online: arrayUnion(data) }); 
+}
+
+// Delete online Users in Array
+export const deleteOnlineUsers = (collection, docId, data) => {
+  const ref = doc(db, collection, docId);
+  return updateDoc(ref, { online: arrayRemove(data) }); 
+}
+
 export const deleteDocument = (collection, docId) => {
   const ref = doc(db, collection, docId);
   return deleteDoc(ref);

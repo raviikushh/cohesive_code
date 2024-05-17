@@ -9,9 +9,9 @@ import {
   } from "@nextui-org/react";
   import { useState } from "react";
   
-  function AddCollaborator({handleAddCollaboartor,projectId, isOpen, onClose ,onOpenChange,  }) {
+  function AddCollaborator({handleAddCollaboartor, isOpen, onClose ,onOpenChange,  }) {
     const [collaboartor, setNewCollaborator] = useState("");
-  
+    
     return (
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
