@@ -5,7 +5,7 @@ import CreateProjectModal from "./CreateProjectModal";
 import { useDisclosure } from "@nextui-org/react";
 import useAuthState from "../../hooks/useAuthState";
 import { useNavigate } from "react-router-dom";
-import { getProjectsByUser } from "../../database";
+import { getProjectsByUser, getDocument } from "../../database";
 import { useEffect, useState } from "react";
 import SharedProjectCard from "./SharedProjectCard";
 
@@ -19,16 +19,38 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const { user } = useAuthState(); // use user.uid to get currrent users id
   const [projects, setProjects] = useState([]);
+  const [sharedProjectData, setsharedProjectData] = useState([]);
 
   const fetchProjects = async (userId) => {
     const projects = await getProjectsByUser(userId);
-    console.log(projects);
+    console.log("projects by user",projects);
     setProjects(projects);
   };
 
+  // console.log("Shared projects",sharedProjectData);
+
+  const getSharedProjects = async (email) => {
+    try {
+      const response = await getDocument("shared", email);
+      let shared = [];
+      // write a loop to get project data for each response.projects
+      for (let i = 0; i < response.projects.length; i++) {
+        const projId = response.projects[i];
+        const project = await getDocument("projects", projId);
+        shared.push({...project,id:projId});
+      }
+      setsharedProjectData(shared);
+      console.log("shared",shared);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
   useEffect(() => {
     if (user) {
-      fetchProjects(user.uid);
+      fetchProjects(user.email);
+      getSharedProjects(user.email);
     }
   }, [user]);
 
@@ -60,10 +82,10 @@ const DashboardPage = () => {
         <div className="grid grid-cols-5 gap-4">
           {/* Display all projects created by the user */}
           {/* <ProjectCard name={projects.name} language={projects.language} /> */}
-          <SharedProjectCard
-            project={{ name: "Cohesive Codes Website", language: "Javascript" }}
-            shared_by={"Deep"}
+          {sharedProjectData.map((projects) => (
+          <SharedProjectCard key={projects.created_by} project={projects}
           />
+          ))}
           <button
             onClick={() => {
               onOpen();

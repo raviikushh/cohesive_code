@@ -45,6 +45,7 @@ function Header() {
               Logout
               <Icon name="log-out" size={16} />
             </Button>
+            <p>{user.email}</p>
           </>
         )}
       </div>

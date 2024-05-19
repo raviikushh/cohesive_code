@@ -4,9 +4,6 @@ import {
   addProjectsInShared,
   deleteCollaborator,
   deleteProjectsInShared,
-  getDocument,
-  setDocument,
-  updateDocument,
 } from "../../database";
 import Layout from "../layout/Layout";
 import { Button } from "@nextui-org/react";
@@ -14,14 +11,14 @@ import Icon from "../shared/Icon";
 import AddCollaborator from "./AddCollaborators";
 import { useDisclosure } from "@nextui-org/react";
 import {useEffect} from "react";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useState } from "react";
 
-const Collaborators = ({projectId, projectData}) => {
+const Collaborators = ({projectId}) => {
   const [colValue, setColValue] = useState("");
+  const[onlineUsers, setOnlineUsers] = useState([]);
 
-    // Handle Online Users
 
     const handleAddCollaboartor = async (collaboartor) => {
       // Adding collaborator in database
@@ -33,8 +30,8 @@ const Collaborators = ({projectId, projectData}) => {
             projectId,
             collaboartor
           );
-          const responseForShared = await addProjectsInShared("/shared", collaboartor,  projectId);
           onClose();
+          const responseForShared = await addProjectsInShared("/shared", collaboartor,  projectId);
         } catch (error) {
           console.log(error);
         }
@@ -59,6 +56,11 @@ const Collaborators = ({projectId, projectData}) => {
       const unsub = onSnapshot(doc(db, "/room", projectId), (doc) => {
         setColValue(doc.data().collaborators);
       });
+      if (projectId) {
+        const unsub = onSnapshot(doc(db, "/room", projectId), (doc) => {
+          setOnlineUsers(doc.data());
+        });
+      }
       return () => {
         unsub();
       };
@@ -104,6 +106,23 @@ const Collaborators = ({projectId, projectData}) => {
                 Add Collaborator
               </Button>
             </div>
+          </div>
+          <div className="col-span-1 overflow-hidden  border border-default-300   rounded-xl mt-6">
+          <h3 className="text-lg  text-green-400 border-b px-3 border-default-300 py-2 bg-default-100">
+              Online Users
+            </h3>
+            {onlineUsers.online &&
+                onlineUsers.online.map((online) => (
+                  <div
+                    key={online}
+                    className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center"
+                  > 
+                    <span className="rounded-full uppercase bg-secondary-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
+                      {online[0].toUpperCase()}
+                    </span>
+                    {online}
+                  </div>
+                ))}
           </div>
         </div>
         {/* leftbar */}

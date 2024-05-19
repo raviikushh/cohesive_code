@@ -107,8 +107,8 @@ export const getProjectsByUser = async (userId) => {
   return await queryDocuments(q);
 }
 
-export const getSharedProjectsByUser = async (userId) => {
-  // TODO
+export const getSharedProjectsByUser = async (email) => {
+
 }
 
 export const getCollaborators = async (projectId) => {

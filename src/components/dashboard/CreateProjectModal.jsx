@@ -32,7 +32,7 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
         name: projectName,
         language: projectLanguage,
         code : '',
-        created_by: user.uid,
+        created_by: user.email,
       };
       const dataforCollaborator = {
         admin: user.email,

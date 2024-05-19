@@ -35,7 +35,6 @@ const ProjectPage = () => {
     // Handle Online Users
     try {
       const response = await addOnlineUsers("/room", projectId, user.email);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +43,6 @@ const ProjectPage = () => {
     // Handle Online Users
     try {
       const response = await deleteOnlineUsers("/room", projectId, user.email);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -67,6 +65,7 @@ const ProjectPage = () => {
             {projectData && (
              <Editor project={projectData} projectId={projectId} />
           )}
+
         </div>
     </div>
   );
