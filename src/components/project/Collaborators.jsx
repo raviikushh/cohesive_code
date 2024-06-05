@@ -1,138 +1,133 @@
-import toast from "react-hot-toast";
 import {
   addCollaborator,
   addProjectsInShared,
   deleteCollaborator,
   deleteProjectsInShared,
 } from "../../database";
-import Layout from "../layout/Layout";
+import { doc, onSnapshot } from "firebase/firestore";
+
+import AddCollaborator from "./AddCollaborators";
 import { Button } from "@nextui-org/react";
 import Icon from "../shared/Icon";
-import AddCollaborator from "./AddCollaborators";
-import { useDisclosure } from "@nextui-org/react";
-import {useEffect} from "react";
-import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
+import toast from "react-hot-toast";
+import useAuthState from "../../hooks/useAuthState";
+import { useDisclosure } from "@nextui-org/react";
+import { useEffect } from "react";
 import { useState } from "react";
 
-const Collaborators = ({projectId}) => {
-  const [colValue, setColValue] = useState("");
-  const[onlineUsers, setOnlineUsers] = useState([]);
+const Collaborators = ({ projectId, admin }) => {
+  const [room, setRoom] = useState("");
+  const { user } = useAuthState();
 
-
-    const handleAddCollaboartor = async (collaboartor) => {
-      // Adding collaborator in database
-      if (!collaboartor) toast.error("Please enter collaborator email");
-    else{
-        try {
-          const response = await addCollaborator(
-            "/room",
-            projectId,
-            collaboartor
-          );
-          onClose();
-          const responseForShared = await addProjectsInShared("/shared", collaboartor,  projectId);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-  
-    const handleDelete = async (collaborator) => {
+  const handleAddCollaboartor = async (collaborator) => {
+    // Adding collaborator in database
+    if (!collaborator) toast.error("Please enter collaborator email");
+    else {
       try {
-        await deleteCollaborator("/room", projectId, collaborator);
-        await deleteProjectsInShared("/shared", collaborator, projectId);
-        toast.success(`${collaborator} deleted successfully`);
+        await Promise.all([
+          addCollaborator("/room", projectId, collaborator),
+          addProjectsInShared("/shared", collaborator, projectId),
+        ]);
+        onClose();
       } catch (error) {
         console.error(error);
+        toast.error("User doesn't exist on our platform.");
       }
+    }
+  };
+
+  const handleDelete = async (collaborator) => {
+    try {
+      await deleteCollaborator("/room", projectId, collaborator);
+      await deleteProjectsInShared("/shared", collaborator, projectId);
+      toast.success(`${collaborator} deleted successfully`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure(
+    "add-collaborator-modal"
+  );
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "/room", projectId), (doc) => {
+      setRoom(doc.data());
+    });
+    return () => {
+      unsub();
     };
-      
-    const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure(
-      "add-collaborator-modal"
-    );
-    // console.log("projectData",projectData.collaborators[0]);
-    useEffect(() => {
-      const unsub = onSnapshot(doc(db, "/room", projectId), (doc) => {
-        setColValue(doc.data().collaborators);
-      });
-      if (projectId) {
-        const unsub = onSnapshot(doc(db, "/room", projectId), (doc) => {
-          setOnlineUsers(doc.data());
-        });
-      }
-      return () => {
-        unsub();
-      };
-    }, [db]);
+  }, [db]);
 
-
+  const OnlineMarker = (isOnline) => {
     return (
-      <Layout>
-        <div className="">
-          {/* Left Sidebar  */}
-          <div className="col-span-1 overflow-hidden  border border-default-300   rounded-xl">
-            <h3 className="text-lg  text-green-400 border-b px-3 border-default-300 py-2 bg-default-100">
-              Collaborators
-            </h3>
-            <div className="py-2 px-3">
-              {colValue &&
-                colValue.map((collaborator) => (
-                  <div
-                    key={collaborator}
-                    className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center"
-                  >
-                    <span className="rounded-full uppercase bg-primary-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
-                      {collaborator[0].toUpperCase()}
-                    </span>
-                    {collaborator}
-                    <Icon
-                      onClick={() => handleDelete(collaborator)}
-                      name="x"
-                      size={16}
-                      className="ml-auto"
-                    />
-                  </div>
-                ))}
-  
-              <Button
-                color="primary"
-                fullWidth
-                radius="sm"
-                className="mt-4"
-                onClick={onOpen}
-              >
-                <Icon name={"plus"} size={16} />
-                Add Collaborator
-              </Button>
-            </div>
-          </div>
-          <div className="col-span-1 overflow-hidden  border border-default-300   rounded-xl mt-6">
-          <h3 className="text-lg  text-green-400 border-b px-3 border-default-300 py-2 bg-default-100">
-              Online Users
-            </h3>
-            {onlineUsers.online &&
-                onlineUsers.online.map((online) => (
-                  <div
-                    key={online}
-                    className="bg-default-50 rounded-md p-2 text-sm shadow-md hover:bg-default-100 cursor-pointer flex gap-4 items-center"
-                  > 
-                    <span className="rounded-full uppercase bg-secondary-600 text-white text-xs text-semibold w-6 h-6 flex items-center justify-center">
-                      {online[0].toUpperCase()}
-                    </span>
-                    {online}
-                  </div>
-                ))}
-          </div>
-        </div>
-        {/* leftbar */}
-        <AddCollaborator
-          handleAddCollaboartor={handleAddCollaboartor}
-          isOpen={isOpen}
-          onClose={onClose}
-          onOpenChange={onOpenChange}
-        />
-      </Layout>
+      <div
+        className={`rounded-full w-2 h-2 bg-green-500 ${
+          isOnline ? "bg-green-500" : "bg-red-500"
+        }`}
+      ></div>
     );
   };
-export default Collaborators
+
+  return (
+    <>
+      <div className="p-4 flex flex-col gap-4 h-full w-full max-w-[300px] ">
+        {/* Left Sidebar  */}
+        <h3 className="text-lg ">Admin</h3>
+        <div className="space-y-2">
+          <div className="rounded-md p-2 py-2.5 text-sm shadow-md  cursor-pointer text-default-700 flex gap-2 items-center border border-amber-500 bg-amber-500/10">
+            <Icon name="crown" size={16} className="text-amber-500 ml-1" />
+            <span className="flex-1 flex items-center gap-2 text-amber-500">
+              {admin}
+            </span>
+          </div>
+        </div>
+        <h3 className="text-lg ">Collaborators</h3>
+        {room.collaborators &&
+          room.collaborators.map((collaborator) => (
+            <div
+              key={collaborator}
+              className="rounded-md p-2 text-sm shadow-md  cursor-pointer text-default-700 flex gap-2 items-center border border-default-200 bg-default-100/50 hover:border-default-300 hover:bg-default-100"
+            >
+              <Icon
+                name="user"
+                size={16}
+                className="text-green-500  rounded-full ml-1"
+              />
+              <span className="flex-1 flex items-center gap-2">
+                {collaborator}
+              </span>
+
+              {user && user.email === admin && (
+                <button
+                  className="text-default-400 hover:text-red-500 hover:bg-red-800/25 border border-transparent hover:border-red-500 rounded-md p-1  "
+                  onClick={() => handleDelete(collaborator)}
+                >
+                  <Icon name="x" size={16} />
+                </button>
+              )}
+            </div>
+          ))}
+        <Button
+          color="primary"
+          fullWidth
+          radius="sm"
+          className=""
+          onClick={onOpen}
+        >
+          <Icon name={"user-plus"} size={16} />
+          Add Collaborator
+        </Button>
+      </div>
+      {/* leftbar */}
+      <AddCollaborator
+        handleAddCollaboartor={handleAddCollaboartor}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+      />
+    </>
+  );
+};
+export default Collaborators;

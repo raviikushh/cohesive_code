@@ -1,14 +1,14 @@
-import useAuthState from "../../hooks/useAuthState";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 import Icon from "../shared/Icon";
+import useAuthState from "../../hooks/useAuthState";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
   const { user, logout } = useAuthState();
 
   return (
-    <nav className="flex container mx-auto items-center justify-between h-16">
+    <nav className="flex items-center justify-between h-16 px-4">
       <div
         onClick={() => navigate("/")}
         className="font-semibold flex gap-2.5 uppercase group items-center text-primary-400 hover:text-secondary-400 cursor-pointer text-xl  "

@@ -1,21 +1,21 @@
 import {
   Button,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Input,
   Select,
   SelectItem,
 } from "@nextui-org/react";
-
 import { addDocument, setDocument } from "../../database";
-import { useState } from "react";
-import useAuthState from "../../hooks/useAuthState";
+
 import { supportedLanguages } from "../../constants/languages";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import useAuthState from "../../hooks/useAuthState";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
   const navigate = useNavigate();
@@ -39,10 +39,10 @@ function CreateProjectModal({ isOpen, onOpenChange, onClose }) {
         online : [],
         collaborators : []
       };
-      const response = await addDocument("/projects", data);
-      const reponseForCollaborator = await setDocument("/room", response.id, dataforCollaborator);
-      const responseForShared = await setDocument("/shared", user.email, {projects: []});
-      console.log(response.id);
+      const response =await addDocument("/projects", data);
+      await setDocument("/room", response.id, dataforCollaborator);
+      
+
       onClose();
       navigate(`/project/${response.id}`);
     } catch (error) {
