@@ -18,6 +18,7 @@ import useAuthState from "../../hooks/useAuthState";
  * using Intl.RelativeTimeFormat
  */
 export function getRelativeTimeString(date, lang = navigator.language) {
+  if(!date) return "";
   // Allow dates or times to be passed
   const timeMs = typeof date === "number" ? date : date.getTime();
 
@@ -144,7 +145,7 @@ const CommentsSection = ({ projectId }) => {
                   <span className="text-xs flex-1 text-default-400">
                     {comment.createdBy} |
                     <em className="pl-1">
-                      {getRelativeTimeString(comment.updated_at.toDate())}
+                      {getRelativeTimeString(comment?.updated_at ? comment.updated_at?.toDate() : comment.created_at?.toDate())}
                     </em>
                   </span>
                   {user.email === comment.createdBy && (
