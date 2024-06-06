@@ -1,4 +1,11 @@
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/react";
+
 import Icon from "../shared/Icon";
 import useAuthState from "../../hooks/useAuthState";
 import { useNavigate } from "react-router-dom";
@@ -37,15 +44,38 @@ function Header() {
           </>
         ) : (
           <>
-            <Button onClick={() => navigate("/dashboard")} variant="solid">
-              <Icon name="layout-dashboard" size={16} />
-              Dashboard
-            </Button>
-            <Button color="primary" onClick={logout}>
-              Logout
-              <Icon name="log-out" size={16} />
-            </Button>
-            <p>{user.email}</p>
+            <Dropdown>
+              <DropdownTrigger>
+                <Button
+                  color={"secondary"}
+                  variant={"flat"}
+                  className="capitalize"
+                >
+                  <Icon name="user" size={16} />
+                  {user?.email}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Dropdown Variants"
+                color={"primary"}
+                variant={"faded"}
+              >
+                <DropdownItem
+                  key="dashboard"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  Dashboard
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  onClick={logout}
+                  className="text-danger"
+                  color="danger"
+                >
+                  Logout
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </>
         )}
       </div>
