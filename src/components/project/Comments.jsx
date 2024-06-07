@@ -180,6 +180,7 @@ const CommentsSection = ({ projectId }) => {
           color="secondary"
           onClick={addComment}
           disabled={!user || !newComment}
+          className="cursor-pointer"
         >
           Comment
         </Button>
