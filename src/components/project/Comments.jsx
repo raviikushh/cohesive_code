@@ -180,7 +180,7 @@ const CommentsSection = ({ projectId }) => {
           color="secondary"
           onClick={addComment}
           disabled={!user || !newComment}
-          className="cursor-pointer"
+          className="cursor-pointer hover:bg-secondary-700"
         >
           Comment
         </Button>

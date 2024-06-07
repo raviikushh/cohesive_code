@@ -41,7 +41,7 @@ const Collaborators = ({ projectId, admin }) => {
     try {
       await deleteCollaborator("/room", projectId, collaborator);
       await deleteProjectsInShared("/shared", collaborator, projectId);
-      toast.success(`${collaborator} deleted successfully`);
+      toast.success(`${collaborator} removed successfully`);
     } catch (error) {
       console.error(error);
     }

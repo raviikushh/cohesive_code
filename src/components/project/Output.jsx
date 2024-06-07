@@ -1,6 +1,5 @@
 import { Button } from "@nextui-org/react";
 import axios from "axios";
-import PropTypes from "prop-types";
 import { useState } from "react";
 
 const Output = ({ editorRef, language, version }) => {
@@ -15,9 +14,9 @@ const Output = ({ editorRef, language, version }) => {
       method: 'POST',
       url: 'https://online-code-compiler.p.rapidapi.com/v1/',
       headers: {
-        'content-type': 'application/json',
-        'X-RapidAPI-Key': 'a400844a2fmshbbf5445a01b5285p113bf9jsnaec9ec9e84f1',
-        'X-RapidAPI-Host': 'online-code-compiler.p.rapidapi.com'
+        'x-rapidapi-key': 'bec9864a4fmsh665a432e8b06093p133bffjsn10fff835ae51',
+        'x-rapidapi-host': 'online-code-compiler.p.rapidapi.com',
+        'Content-Type': 'application/json',
       },
       data: {
         language,
